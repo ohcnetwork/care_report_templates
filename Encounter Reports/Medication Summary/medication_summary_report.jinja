@@ -1,0 +1,409 @@
+{% set report_title = "Medication Summary" %}
+{% set logo_img = "imput_logo_image_url" %}
+{% set medication_questionnaire_slug = "enter_your_questionnaire_slug_on_medication_advice" %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <style>
+        @page {
+            size: A4;
+            margin: 150px 40px 60px 40px;
+        }
+
+
+        body {
+            line-spacing: 1.6;
+            font-family: "Times New Roman", Times, serif;
+            margin: 0;
+            padding: 0;
+            max-width: 100%;
+            font-size: 14px;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: #2E8B57;
+        }
+
+        h1 {
+            text-align: center;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            border-bottom: 1px solid #333;
+        }
+
+        table {
+            width: 100%;
+            margin: 10px 0 20px 0;
+            border: none;
+            line-height: 1.2;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 4px 8px;
+            text-align: left;
+            font-size: 10px;
+        }
+
+        th {
+            background-color: #F2F2F2;
+
+        }
+
+        .sub-table th {
+            background-color: #FAFAFA;
+            font-size: 10px;
+        }
+
+        .sub-table th,
+        .sub-table td {
+
+            margin-top: 30px;
+        }
+
+        .sub-table {
+            white-space: pre-line;
+            overflow-wrap: break-word;
+        }
+
+        .no-border,
+        .no-border th,
+        .no-border td {
+            border: none !important;
+            padding: 3px;
+        }
+
+        .no-border th {
+            background-color: transparent !important;
+        }
+
+        .note-text {
+            font-style: italic;
+            font-size: 8px;
+            margin-top: 12px;
+        }
+
+
+
+
+        .footer {
+            margin-top: 8px;
+            padding-top: 0;
+            border-top: 1px solid #333;
+            font-size: 8px;
+            color: #666;
+            text-align: center;
+        }
+
+        .separator {
+            border-top: 1px solid #333;
+            margin: 20px 0;
+        }
+
+        .header {
+            position: fixed;
+            top: -150px;
+            left: 0;
+            right: 0;
+
+            height: 120px;
+            padding: 10px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            background: white;
+
+
+            z-index: 2;
+        }
+
+
+        .header-logo {
+            height: 50px;
+            width: auto;
+        }
+
+        .header-title {
+            flex-grow: 1;
+            text-align: center;
+        }
+
+        .header-title h1 {
+            margin: 0;
+            border: none;
+            padding: 0;
+            font-size: 24px;
+            color: #2E8B57;
+        }
+
+        .header-placeholder {
+            width: 100%;
+        }
+
+        .report-box {
+            margin-top: 7px;
+            margin-bottom: 7px;
+            font-size: 10px;
+            border-right: 1px solid #ddd;
+            border-left: 1px solid #ddd;
+            /* Outer border */
+        }
+
+        .report-note,
+        .report-conclusion {
+            margin-bottom: 8px;
+            padding: 5px;
+        }
+
+        .report-row {
+            width: 100%;
+            display: flex;
+        }
+
+        .report-header {
+            font-weight: bold;
+            border-bottom: 1px solid #ddd;
+            border-top: 1px solid #ddd
+        }
+
+        .report-cell {
+            padding: 4px;
+            box-sizing: border-box;
+
+        }
+
+        /* Remove right border on last column */
+        .report-row .report-cell:last-child {
+            border-right: none;
+        }
+
+        /* Remove bottom border on last row */
+        .report-row:last-child .report-cell {
+            border-bottom: none;
+        }
+
+        .report-seperator {
+            border-top: 1px solid #999
+        }
+
+        /* Column widths */
+        .col-date {
+            width: 15%;
+        }
+
+        .col-title {
+            width: 25%;
+            display: flex;
+            justify-content: left;
+        }
+
+        .col-result {
+            width: 20%;
+            display: flex;
+            justify-content: right;
+        }
+
+        .col-range {
+            width: 20%;
+            display: flex;
+            justify-content: right;
+        }
+
+        .col-int {
+            width: 25%;
+            display: flex;
+            margin-right: 10px;
+            justify-content: right;
+        }
+
+        .col-note {
+            width: 25%;
+            display: flex;
+            margin-right: 10px;
+            justify-content: center;
+        }
+
+        /* Full width title row */
+        .report-title-row {
+            font-weight: bold;
+            padding: 6px;
+            margin: 2px 0px 0px 0;
+        }
+
+        .content {
+            position: relative;
+            z-index: 5;
+            margin-top: -40px;
+
+            @media print {
+                .header {
+                    display: flex !important;
+                    border-bottom: 1px solid #333;
+                }
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <div class="header-title">
+            <h1 style="text-align: left;">{{ encounter.facility.name }}</h1>
+            <div style="text-align: left; font-size:10px;">{{ encounter.facility.address }}<p>{{
+                    encounter.facility.phone_number }}</p>
+            </div>
+        </div>
+        <img alt="Logo" src={{logo_img}}
+            style="height: 100px; width: auto;">
+    </div>
+
+    <div class="content">
+        <h2 style="text-align: center;">{{report_title}}</h2>
+        <table class="no-border">
+            <tr>
+                <th>Name</th>
+                <td>{{ encounter.patient.name }}</td>
+
+                <th>Date</th>
+                <td> {{current_date()}}</>
+            </tr>
+
+            {% set official_identifiers = encounter.patient.instance_identifiers|selectattr('config.use', 'equalto',
+            'Official')|list %}
+
+            <tr>
+                <th>Age</th>
+                <td>{{ encounter.patient.age }}</td>
+
+                {% if official_identifiers|length > 0 %}
+                <th>{{ official_identifiers[0].config.display }}</th>
+                <td>{{ official_identifiers[0].value }}</td>
+                {% endif %}
+            </tr>
+
+            <tr>
+                <th>Gender</th>
+                <td>{{ encounter.patient.gender }}</td>
+                <th>Admission Date/Time</th>
+                <td>{{ encounter.start_time |datetime }}</td>
+            </tr>
+
+            <tr>
+                <th>Address</th>
+                <td>{{ encounter.patient.address }}</td>
+                <th>Discharge Date/Time</th>
+                <td>{{ encounter.end_time |datetime }}</td>
+            </tr>
+
+        </table>
+
+
+        {% set prescriptions = encounter.medication_prescriptions | list %}
+
+        {% if prescriptions %}
+
+        <div style="font-weight: bold; font-size: 12px; margin-bottom: 5px; margin-top:5px;">
+            Medications
+        </div>
+
+        <div style="border-bottom:1px solid #ddd" ; class="report-box">
+
+            <!-- Header -->
+            <div class="report-row report-header">
+                <div class="report-cell col-title">Medicine</div>
+                <div class="report-cell col-result">Dosage</div>
+                <div class="report-cell col-range">Frequency</div>
+                <div class="report-cell col-int">Duration</div>
+            </div>
+
+            {% for mp in prescriptions %}
+            {% for medication in mp.medications.filter(status="active") %}
+
+            {% if medication.dosage_instructions %}
+            {% for di in medication.dosage_instructions %}
+
+            <div class="report-row">
+
+                <div class="report-cell col-title">
+                    {{ medication.name }}
+                </div>
+
+                <div class="report-cell col-result">
+                    {{ di.dosage }}
+                </div>
+
+                <div class="report-cell col-range">
+                    {{ di.frequency }}
+                </div>
+
+                <div class="report-cell col-int">
+                    {{ di.duration }}
+                </div>
+
+            </div>
+
+            {% endfor %}
+            {% endif %}
+
+            {% endfor %}
+            {% endfor %}
+
+        </div>
+
+        {% endif %}
+
+
+        {% set advices = encounter.questionnaire_responses
+        .filter(slug = medication_questionnaire_slug) | list %}
+        {% if advices %}
+        {% set advice = advices | first %}
+
+        {% for response in advice.responses %}
+
+        {% if response.question.get('text', response.question) == "Medication Advice" %}
+
+        <div class="medical-advice">
+
+            <!-- Heading -->
+            <div style="font-size:12px; font-weight:bold; margin-bottom:4px;">
+                Medical Advice
+            </div>
+
+            <div style="font-size:10px; margin-bottom:4px; width:80%; word-wrap:break-word; overflow-wrap:break-word;">
+                {{
+                response.answer.get('values',[response.answer])
+                |map(attribute='value')
+                |join('<br>')
+            |safe
+            }}
+            </div>
+
+            <!-- Advised By -->
+            <div style="font-size:10px; font-style:italic;">
+                Advised by: <strong>{{ advice.updated_by.full_name }}</strong>
+            </div>
+        </div>
+        {% endif %}
+
+        {% endfor %}
+
+        {% endif %}
+
+        <div class="note-text""> Note:Content of the {{report_title}} will not be changed for any reason once the patient is discharged from the hospital. Please bring this report when you come for checkup.This {{report_title}} is not a legal document or certificate. </div>
+         <div class=" footer"> This is a computer-generated {{report_title}}. </div>
+    </div>
+</body>
+
+</html>

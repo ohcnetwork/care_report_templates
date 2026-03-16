@@ -1,0 +1,25 @@
+{
+  "title": "Medication and Advice",
+  "slug": "medication-and-advice",
+  "description": "",
+  "questions": [
+    {
+      "id": "f89d062e-45f1-4846-8700-9d6dd74efa7e",
+      "text": "Medication",
+      "type": "structured",
+      "link_id": "Q-1769607421179",
+      "repeats": false,
+      "structured_type": "medication_request"
+    },
+    {
+      "id": "9444f3a5-c7da-4b06-b4cb-986bfb3a884e",
+      "text": "Medication Advice",
+      "type": "text",
+      "link_id": "Q-1769607453695"
+    }
+  ],
+  "status": "active",
+  "subject_type": "encounter",
+  "version": 0.1,
+  "tags": []
+}

@@ -1,0 +1,36 @@
+{
+  "title": "Medical Certificate",
+  "slug": "medical-certificate",
+  "description": "medical certificate",
+  "questions": [
+    {
+      "id": "740e1d92-24e0-4382-bc34-bde934a69db1",
+      "text": "From Date",
+      "type": "date",
+      "link_id": "Q-1772715238857",
+      "description": ""
+    },
+    {
+      "id": "87929239-de2b-4e90-9189-124938f6e24a",
+      "text": "Diagnosis",
+      "type": "string",
+      "link_id": "Q-1772715324919"
+    },
+    {
+      "id": "9f3ab097-d33b-4b5f-9694-30a5abc0e56d",
+      "text": "Registration No",
+      "type": "string",
+      "link_id": "Q-1772715373635"
+    },
+    {
+      "id": "57a35243-48f2-45b7-997f-581007343d7b",
+      "text": "Number Of Days",
+      "type": "string",
+      "link_id": "Q-1772715676325"
+    }
+  ],
+  "status": "active",
+  "subject_type": "encounter",
+  "version": 0.1,
+  "tags": []
+}

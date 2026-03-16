@@ -1,0 +1,23 @@
+{
+  "title": "Certificate Of Medical Fitness",
+  "slug": "certificate-of-medical-fi",
+  "description": "",
+  "questions": [
+    {
+      "id": "4d1d798c-9cca-4691-9223-662c70e91077",
+      "text": "From Date",
+      "type": "date",
+      "link_id": "Q-1772784513132"
+    },
+    {
+      "id": "8cc71a8c-37a8-409a-b2e0-eb134d8da6e8",
+      "text": "Registration No",
+      "type": "string",
+      "link_id": "Q-1773648510107"
+    }
+  ],
+  "status": "active",
+  "subject_type": "encounter",
+  "version": 0.1,
+  "tags": []
+}
