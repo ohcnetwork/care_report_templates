@@ -1,6 +1,5 @@
 {% set report_title = "Treatment Summary" %}
 {% set logo_img = "input_logo_image_url" %}
-{% set questionnaire_slug = "enter_specified_questionnaire_slug" %}
 
 <!DOCTYPE html>
 <html>
@@ -93,25 +92,6 @@
             margin-top: 12px;
         }
 
-        /* ---- Clinical Summary ---- */
-
-        .clinical-section {
-            margin-bottom: 12px;
-            page-break-inside: avoid;
-        }
-
-        .clinical-label {
-            font-size: 10px;
-            font-weight: bold;
-            margin-bottom: 4px;
-        }
-
-        .clinical-value {
-            border-bottom: 1px solid #ddd;
-            padding: 6px 8px;
-            font-size: 11px;
-            white-space: pre-line;
-        }
 
         /* ---- Date row (single line) ---- */
 
@@ -355,6 +335,14 @@
                 <th>Discharge Date/Time</th>
                 <td>{{ encounter.end_time |datetime }}</td>
             </tr>
+            {% set users = encounter.care_team | list %}
+            {% if users %}
+            {% set user= users | first %}
+            <tr>
+                <th> {{user.role}}</th>
+                <td>{{ user.user.full_name }}</td>
+            </tr>
+            {% endif %}
 
         </table>
 
@@ -566,10 +554,60 @@
 
         {% endif %}
 
+        {% set service_requests =
+        encounter.service_requests
+        .filter(status="active")
+        | list
+        %}
+
+        {% if service_requests %}
+        <div style="font-weight: bold; font-size: 12px; margin-bottom: 5px; margin-top:5px;">
+            Service Requests
+        </div>
+
+        <div style="border-bottom:1px solid #ddd" class="report-box">
+
+            <div class="report-row report-header">
+                <div class="report-cell col-title">Title</div>
+                <div class="report-cell col-result">Service Type</div>
+                <div class="report-cell col-result">Status</div>
+                <div class="report-cell col-result">Priority</div>
+            </div>
+
+            {% for req in service_requests %}
+
+            <div class="report-row">
+
+                <div class="report-cell col-title">
+                    {{ req.title or "-" }}
+                </div>
+
+                <div class="report-cell col-result">
+                    {{ req.category| capitalize if req.category else "-" }}
+                </div>
+
+                <div class="report-cell col-result">
+                    {{ req.status| capitalize if req.status else "-" }}
+                </div>
+
+                <div class="report-cell col-result">
+                    {{ req.priority | capitalize if req.priority else "-" }}
+                </div>
+                <div class="report-cell col-result">
+                    {{ req.requester.full_name | capitalize if req.requester.full_name else "-" }}
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+        {% endif %}
+
         {% set reports = encounter.diagnostic_reports.filter(status="final") | list %}
         {% if reports %}
         <div style="font-weight: bold; font-size: 12px; margin-bottom: 5px; margin-top:5px;">
-            Service Request
+            Diagnostic Report
         </div>
         <div class="report-box">
             <!-- Header Row -->
@@ -720,43 +758,6 @@
             {% endif %}
             <div style=" border-top: 1px solid #ddd; margin: 2px 0;"></div>
             {% endfor %}
-        </div>
-        {% endif %}
-
-        {% set qr = encounter.questionnaire_responses
-        .filter(slug=questionnaire_slug) | list %}
-
-        {% if qr %}
-        {% set qr = qr | first %}
-
-        <div style="margin-top: 16px;">
-
-            <div style="font-weight: bold; font-size: 12px; margin-bottom: 10px;">
-                Reports
-            </div>
-
-            <div style="border: 1px solid #ddd; padding: 10px;">
-
-                {% for resp in qr.responses %}
-                {% set label = resp.question.get('text', resp.question) %}
-                {% set values = resp.answer.get('values', [resp.answer]) %}
-
-                <div class="clinical-section">
-                    <div class="clinical-label">
-                        {{ label }}
-                    </div>
-
-                    <div class="clinical-value">
-                        {%- for v in values -%}
-                        {{ v.value }}
-                        {% if not loop.last %}<br>{% endif %}
-                                    {%- endfor -%}
-                    </div>
-                </div>
-                {% endfor %}
-                <div class="note-text">Updated by :{{ qr.updated_by.full_name }}</div>
-            </div>
-
         </div>
         {% endif %}
 
